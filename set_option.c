@@ -52,7 +52,7 @@ int main (int argc, char **argv)
 	
 	ldap_return = ldap_connect(p_LDAP_connection, NULL);
 
-	if (ldap_connect == LDAP_SUCCESS) 
+	if (ldap_return == LDAP_SUCCESS) 
 	{
 		printf("ldap_connect succeded\n");
 	}
@@ -63,23 +63,38 @@ int main (int argc, char **argv)
 	}
 	
 	// BIND with using some credentials
+	/*
+	PCHAR p_my_DN = "cn=users,dc=etersoft,dc=ru";
+	SEC_WINNT_AUTH_IDENTITY security_identity;
+	PCHAR p_user_name = "konstantin";
+	PCHAR p_password  = " ";
+	
 
-	PCHAR p_my_DN = " ";
-
+	security_identity.User = (unsigned char*)p_user_name;
+	security_identity.UserLength = strlen(p_user_name);
+	security_identity.Password = (unsigned char*)p_password;
+	security_identity.PasswordLength = strlen(p_password);
+	security_identity.Domain = (unsigned char*)p_host_name;
+	security_identity.DomainLength = strlen(p_host_name);
+	security_identity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
+	*/
 
 	ldap_return = ldap_bind_s( 
 			p_LDAP_connection,
-			p_my_DN,
-			(PCHAR) security_identification,
-			LDAP_AUTH_NEGOTIATE);
+			NULL,
+			NULL, 			   // credential structure 
+			LDAP_AUTH_NEGOTIATE);      // mode of authentification
+
 
 	if (ldap_return == LDAP_SUCCESS)
 	{
-		
+		printf("ldap_bind_s success\n");
+
 	}
 	else
 	{
-
+		printf("ERROR ldap_bind_s: 0x%0lu\n", ldap_return);
 	}
+
 }
 
