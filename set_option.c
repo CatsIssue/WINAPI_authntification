@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <winldap.h>
 #include <winber.h>
+#include <string.h> 
 	
 #include <stdio.h>
 #include <stdlib.h>
@@ -103,7 +104,7 @@ int main (int argc, char **argv)
 
     ULONG errorCode = LDAP_SUCCESS;
     LDAPMessage* pSearchResult;
-    PCHAR pMyFilter = "(sAMAccountName=konstantin)";
+    PCHAR pMyFilter = "(sAMAccountName=*)";
     PCHAR pMyAttributes[] = { 
 	"cn",
 	"dn",
@@ -220,7 +221,7 @@ int main (int argc, char **argv)
             {
                 printf(": [NO ATTRIBUTE VALUE RETURNED]");
             }
-
+	
             // Output the attribute values
             else
             {
@@ -231,11 +232,21 @@ int main (int argc, char **argv)
                 }
                 else
                 {
-                    // Output the first attribute value
-                    printf(": %s", *ppValue);
 
+                    // Output the first attribute value
+		    if (!strcmp(pAttribute, "objectGUID"))
+		    {
+			printf(": %0x", (unsigned int) *ppValue);
+		    }
+		    else{
+			    
+		   	 printf(": %s", *ppValue);
+		    }
                     // Output more values if available
-                    ULONG z;
+                   	 ULONG z;
+		   
+		    
+
                     for(z=1; z<iValue; z++)
                     {
                         printf(", %s", ppValue[z]);
