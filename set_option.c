@@ -104,7 +104,7 @@ int main (int argc, char **argv)
 
     ULONG errorCode = LDAP_SUCCESS;
     LDAPMessage* pSearchResult;
-    PCHAR pMyFilter = "(sAMAccountName=*)";
+    PCHAR pMyFilter = "(sAMAccountName=konstantin)";
     PCHAR pMyAttributes[] = { 
 	"cn",
 	"dn",
@@ -238,8 +238,13 @@ int main (int argc, char **argv)
 		    {
 			printf(": %0x", (unsigned int) *ppValue);
 		    }
+		    else if (!strcmp(pAttribute, "objectSid")) 
+		    {
+			SID* sid_pointer = (SID*)ppValue;	
+			printf(": %d-%d-%d", (unsigned int)sid_pointer->Revision, (unsigned int)sid_pointer->SubAuthorityCount, (unsigned int)(sid_pointer->IdentifierAuthority).Value);
+
+		    }
 		    else{
-			    
 		   	 printf(": %s", *ppValue);
 		    }
                     // Output more values if available
