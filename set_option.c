@@ -236,12 +236,22 @@ int main (int argc, char **argv)
                     // Output the first attribute value
 		    if (!strcmp(pAttribute, "objectGUID"))
 		    {
-			printf(": %0x", (unsigned int) *ppValue);
+			GUID* guid_pointer = (GUID*)ppValue;
+			printf(": %0lx-%0x-%0x",  guid_pointer->Data1, guid_pointer->Data2, guid_pointer->Data3 );
+			for(int i = 0; i < 8; ++i)
+			{
+				printf("-%0x", guid_pointer->Data4[i]);
+			}
+
 		    }
 		    else if (!strcmp(pAttribute, "objectSid")) 
 		    {
 			SID* sid_pointer = (SID*)ppValue;	
 			printf(": %d-%d-%d", (unsigned int)sid_pointer->Revision, (unsigned int)sid_pointer->SubAuthorityCount, (unsigned int)(sid_pointer->IdentifierAuthority).Value);
+			for(int i = 0; i < 5; ++i)
+                        {
+                                printf("-%0x", sid_pointer->SubAuthority[i]);
+                        }
 
 		    }
 		    else{
